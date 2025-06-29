@@ -10,6 +10,9 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
     const [filterValue, setFilterValue] = useState('');
     const [purposeFilter, setPurposeFilter] = useState('');
     const [expandedContactId, setExpandedContactId] = useState(null);
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const contactsPerPage = 10;
 
     const fetchContacts = useCallback(async () => {
         try {
@@ -150,6 +153,10 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
         return textFilterMatch && purposeFilterMatch;
     }).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
+    // Pagination logic
+    const totalPages = Math.ceil(filteredContacts.length / contactsPerPage);
+    const paginatedContacts = filteredContacts.slice((currentPage - 1) * contactsPerPage, currentPage * contactsPerPage);
+
     return (
         <div className="bg-white rounded-lg p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Private Contacts</h2>
@@ -255,8 +262,9 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
             ) : filteredContacts.length === 0 ? (
                 <p className="text-gray-600">No contacts match your filters.</p>
             ) : (
+                <>
                 <ul className="space-y-4">
-                    {filteredContacts.map(contact => {
+                    {paginatedContacts.map(contact => {
                         const isExpanded = expandedContactId === contact.id;
                         return (
                             <li
@@ -333,6 +341,25 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
                         );
                     })}
                 </ul>
+                {/* Pagination Controls */}
+                <div className="flex justify-center items-center mt-6 gap-2">
+                    <button
+                        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="mx-2 text-gray-700">Page {currentPage} of {totalPages}</span>
+                    <button
+                        className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700"
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+                </>
             )}
         </div>
     );

@@ -327,7 +327,7 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         ],
         distributor: [
             { sectionTitle: 'Distributor Specific Fields', sectionColor: 'red', fields: [
-                { id: 'distributorTerritory', label: 'Territory', type: 'text', placeholder: 'e.g., North India, EMEA' },
+                { id: 'distributorTerritory', label: 'Interested In', type: 'text', placeholder: 'e.g., Electronics, FMCG, Textiles' },
             ]}
         ],
         customer: [
@@ -1660,8 +1660,7 @@ function App() {
                         </ul>
                     </nav>
                     <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-600">
-                        <span className="block font-semibold mb-1">Your User ID (Simulated):</span>
-                        <span id="user-id-value" className="font-mono bg-gray-100 px-3 py-1 rounded-md text-xs break-all">anonymous-user-001</span>
+                        {/* User ID display removed as requested */}
                     </div>
                 </aside>
 
