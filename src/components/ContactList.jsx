@@ -279,6 +279,11 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
                                     <span className="text-lg font-semibold text-gray-900 flex items-center">
                                         {Icons.User} {contact.name || ''}
                                     </span>
+                                    {contact.purpose && (
+                                        <span className="ml-3 px-2 py-0.5 rounded-full bg-gray-200 text-xs text-gray-700 font-medium whitespace-nowrap">
+                                            {contact.purpose.charAt(0).toUpperCase() + contact.purpose.slice(1)}
+                                        </span>
+                                    )}
                                     <span className="ml-2 text-gray-400">{isExpanded ? '▲' : '▼'}</span>
                                 </div>
                                 {isExpanded && (
