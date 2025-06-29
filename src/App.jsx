@@ -144,29 +144,14 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         }
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
+            navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                try {
-                    // Call the digipin API
-                    const digipinUrl = `${API_BASE_URL}/digipin/encode?latitude=${latitude}&longitude=${longitude}`;
-                    const response = await fetch(digipinUrl);
-                    if (!response.ok) throw new Error('Failed to fetch digipin');
-                    const data = await response.json();
-                    if (data.digipin) {
-                        setFormData(prev => ({ ...prev, location: data.digipin }));
-                        displayMessage('Location (Digipin) fetched successfully!', true);
-                    } else {
-                        displayMessage('Could not get digipin for location.', false);
-                    }
-                } catch (error) {
-                    console.error('Error fetching digipin:', error);
-                    displayMessage('Error fetching digipin for your location.', false);
-                } finally {
-                    if (submitBtn) submitBtn.disabled = false;
-                    if (fetchBtn) {
-                        fetchBtn.disabled = false;
-                        fetchBtn.innerHTML = `${Icons.MapPin} Fetch Location`;
-                    }
+                setFormData(prev => ({ ...prev, latitude, longitude }));
+                displayMessage('Latitude/Longitude fetched successfully!', true);
+                if (submitBtn) submitBtn.disabled = false;
+                if (fetchBtn) {
+                    fetchBtn.disabled = false;
+                    fetchBtn.innerHTML = `${Icons.MapPin} Fetch Location`;
                 }
             }, (error) => {
                 console.error('Geolocation error:', error);
@@ -271,7 +256,8 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         { id: 'city', label: 'City', type: 'text' },
         { id: 'state', label: 'State', type: 'select', options: [{ value: '', label: 'Select State' }, ...states.map(s => ({ value: s, label: s }))], className: 'bg-white' },
         { id: 'district', label: 'District', type: 'select', options: [], disabled: true, className: 'bg-white' }, // Options populated dynamically
-        { id: 'location', label: 'Location (Auto-fill or Manual)', type: 'location_input', placeholder: 'e.g., Current position, Office address' },
+        { id: 'latitude', label: 'Latitude', type: 'number', placeholder: 'e.g., 17.385044', step: 'any' },
+        { id: 'longitude', label: 'Longitude', type: 'number', placeholder: 'e.g., 78.486671', step: 'any' },
         { id: 'nativeLanguage', label: 'Native Language', type: 'text', placeholder: 'e.g., Telugu, Hindi' },
         { id: 'remarks', label: 'Remarks', type: 'textarea' },
         { id: 'notes', label: 'Notes', type: 'textarea' },
@@ -437,22 +423,30 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
                 break;
             case 'location_input':
                 inputElement = (
-                    <div className="flex items-center mt-1">
+                    <div className="flex gap-2 items-center mt-1">
                         <input
-                            type="text"
-                            id={field.id}
-                            value={value}
+                            type="number"
+                            id="latitude"
+                            value={formData.latitude || ''}
                             onChange={handleChange}
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            placeholder={placeholderAttr}
-                            disabled={disabledAttr}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            placeholder="Latitude"
+                            step="any"
+                        />
+                        <input
+                            type="number"
+                            id="longitude"
+                            value={formData.longitude || ''}
+                            onChange={handleChange}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            placeholder="Longitude"
+                            step="any"
                         />
                         <button
                             type="button"
                             id="fetch-location-btn"
-                            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-r-md shadow-sm transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap flex items-center"
+                            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-md shadow-sm transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap flex items-center"
                             onClick={handleFetchLocation}
-                            disabled={disabledAttr}
                         >
                             {Icons.MapPin} Fetch Location
                         </button>
