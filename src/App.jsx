@@ -177,7 +177,7 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         const dataToSend = { ...formData };
 
         // Validation
-        if (dataToSend.purpose !== 'teaStall' && !dataToSend.name) {
+        if (dataToSend.purpose !== 'teaStall' && dataToSend.purpose !== 'shops' && !dataToSend.name) {
             displayMessage('Name is required for this contact purpose.', false);
             if (submitBtn) submitBtn.disabled = false;
             return;
@@ -187,16 +187,28 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
             if (submitBtn) submitBtn.disabled = false;
             return;
         }
+        if (dataToSend.purpose === 'shops') {
+            if (!dataToSend.shopName || !dataToSend.shopOwnerName || !dataToSend.shopContactNumber || !dataToSend.shopCategory || !dataToSend.shopAddress) {
+                displayMessage('Shop Name, Owner Name, Contact Number, Shop Category, and Shop Address are required for Shop contacts.', false);
+                if (submitBtn) submitBtn.disabled = false;
+                return;
+            }
+        }
 
         // Convert number fields to actual numbers
         ['xTwitterFollowers', 'facebookFollowers', 'youtubeFollowers', 'instagramFollowers', 'teaStallTeaPowderPrice'].forEach(key => {
             dataToSend[key] = dataToSend[key] ? Number(dataToSend[key]) : null;
         });
 
-        // Handle special case for 'name' and 'phone' if purpose is 'teaStall'
+        // Handle special case for 'name' and 'phone' if purpose is 'teaStall' or 'shops'
         if (dataToSend.purpose === 'teaStall') {
             dataToSend.name = dataToSend.teaStallName;
             dataToSend.phone = dataToSend.teaStallMobileNumber;
+        }
+        if (dataToSend.purpose === 'shops') {
+            dataToSend.name = dataToSend.shopName;
+            dataToSend.phone = dataToSend.shopContactNumber;
+            dataToSend.address = dataToSend.shopAddress;
         }
 
         dataToSend.timestamp = new Date().toISOString();
@@ -245,21 +257,22 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         { value: 'serviceProvider', label: 'Service Provider' },
         { value: 'customer', label: 'Customer' },
         { value: 'teaStall', label: 'Tea Stall' },
+        { value: 'shops', label: 'Shops' },
     ];
 
     const commonFields = [
-        { id: 'name', label: 'Name', type: 'text', required: true, excludeForPurpose: ['teaStall'] },
-        { id: 'phone', label: 'Mobile', type: 'tel', excludeForPurpose: ['teaStall'] },
-        { id: 'email', label: 'Email', type: 'email', excludeForPurpose: ['teaStall'] },
-        { id: 'company', label: 'Company', type: 'text', excludeForPurpose: ['teaStall', 'influencer', 'political', 'celebrity', 'serviceProvider', 'customer'] },
-        { id: 'address', label: 'Address (Street, Zip)', type: 'text' },
-        { id: 'city', label: 'City', type: 'text' },
-        { id: 'state', label: 'State', type: 'select', options: [{ value: '', label: 'Select State' }, ...states.map(s => ({ value: s, label: s }))], className: 'bg-white' },
-        { id: 'district', label: 'District', type: 'select', options: [], disabled: true, className: 'bg-white' }, // Options populated dynamically
-        { id: 'location', label: 'Location (Auto-fill or Manual)', type: 'location_input', placeholder: 'e.g., Current position, Office address' },
-        { id: 'nativeLanguage', label: 'Native Language', type: 'text', placeholder: 'e.g., Telugu, Hindi' },
-        { id: 'remarks', label: 'Remarks', type: 'textarea' },
-        { id: 'notes', label: 'Notes', type: 'textarea' },
+        { id: 'name', label: 'Name', type: 'text', required: true, excludeForPurpose: ['teaStall', 'shops'] },
+        { id: 'phone', label: 'Mobile', type: 'tel', excludeForPurpose: ['teaStall', 'shops'] },
+        { id: 'email', label: 'Email', type: 'email', excludeForPurpose: ['teaStall', 'shops'] },
+        { id: 'company', label: 'Company', type: 'text', excludeForPurpose: ['teaStall', 'influencer', 'political', 'celebrity', 'serviceProvider', 'customer', 'shops'] },
+        { id: 'address', label: 'Address (Street, Zip)', type: 'text', excludeForPurpose: ['shops'] },
+        { id: 'city', label: 'City', type: 'text', excludeForPurpose: ['shops'] },
+        { id: 'state', label: 'State', type: 'select', options: [{ value: '', label: 'Select State' }, ...states.map(s => ({ value: s, label: s }))], className: 'bg-white', excludeForPurpose: [] },
+        { id: 'district', label: 'District', type: 'select', options: [], disabled: true, className: 'bg-white', excludeForPurpose: [] },
+        { id: 'location', label: 'Location (Auto-fill or Manual)', type: 'location_input', placeholder: 'e.g., Current position, Office address', excludeForPurpose: [] },
+        { id: 'nativeLanguage', label: 'Native Language', type: 'text', placeholder: 'e.g., Telugu, Hindi', excludeForPurpose: ['shops'] },
+        { id: 'remarks', label: 'Remarks', type: 'textarea', excludeForPurpose: [] },
+        { id: 'notes', label: 'Notes', type: 'textarea', excludeForPurpose: [] },
     ];
 
     const purposeSpecificFields = {
@@ -321,13 +334,43 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
             { sectionTitle: 'Customer Specific Fields', sectionColor: 'orange', fields: [
                 { id: 'customerType', label: 'Customer Type', type: 'select', options: [{ value: '', label: 'Select Type' }, { value: 'lead', label: 'Lead' }, { value: 'active', label: 'Active' }, { value: 'churned', label: 'Churned' }] },
             ]}
+        ],
+        shops: [
+            { sectionTitle: 'Shop Details', sectionColor: 'green', fields: [
+                { id: 'shopCategory', label: 'Shop Category', type: 'text', required: true },
+                { id: 'shopName', label: 'Shop Name', type: 'text', required: true },
+                { id: 'shopOwnerName', label: 'Owner Name', type: 'text', required: true },
+                { id: 'shopContactNumber', label: 'Contact Number', type: 'tel', required: true },
+                { id: 'shopAddress', label: 'Shop Address', type: 'text', required: true },
+                { id: 'shopVillage', label: 'Village', type: 'text' },
+                { id: 'shopMandal', label: 'Mandal', type: 'text' },
+                { id: 'state', label: 'State', type: 'select', options: [{ value: '', label: 'Select State' }, ...states.map(s => ({ value: s, label: s }))], className: 'bg-white' },
+                { id: 'district', label: 'District', type: 'select', options: [], disabled: true, className: 'bg-white' },
+                { id: 'location', label: 'Location (Auto-fill or Manual)', type: 'location_input', placeholder: 'e.g., Current position, Office address' },
+                { id: 'remarks', label: 'Remarks', type: 'textarea' },
+                { id: 'notes', label: 'Notes', type: 'textarea' },
+            ]}
         ]
     };
 
     const getFieldsForPurpose = (purpose) => {
+        if (purpose === 'shops') {
+            // Only show the shop-specific fields for shops, not the common fields
+            const fields = [];
+            const purposeSpecific = purposeSpecificFields[purpose];
+            if (purposeSpecific) {
+                purposeSpecific.forEach(section => {
+                    if (section.sectionTitle) {
+                        fields.push({ id: `section_title_${section.sectionColor}`, type: 'sectionTitle', title: section.sectionTitle, color: section.sectionColor });
+                    }
+                    fields.push(...section.fields);
+                });
+            }
+            return fields;
+        }
+        // Default: common fields + purpose-specific fields
         const fields = [...commonFields];
         const purposeSpecific = purposeSpecificFields[purpose];
-
         if (purposeSpecific) {
             purposeSpecific.forEach(section => {
                 if (section.sectionTitle) {

@@ -173,6 +173,7 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
                             <option value="serviceProvider">Service Provider</option>
                             <option value="customer">Customer</option>
                             <option value="teaStall">Tea Stall</option>
+                            <option value="shops">Shops</option>
                         </select>
                     </div>
                     <div>
@@ -227,6 +228,13 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
                             <option value="teaStallMandal">Tea Stall Mandal</option>
                             <option value="teaStallTeaPowderPrice">Tea Stall Tea Powder Price</option>
                             <option value="teaStallOtherSellingItems">Tea Stall Other Selling Items</option>
+                            <option value="shopCategory">Shop Category</option>
+                            <option value="shopName">Shop Name</option>
+                            <option value="shopOwnerName">Shop Owner Name</option>
+                            <option value="shopContactNumber">Shop Contact Number</option>
+                            <option value="shopAddress">Shop Address</option>
+                            <option value="shopVillage">Shop Village</option>
+                            <option value="shopMandal">Shop Mandal</option>
                         </select>
                     </div>
                     <div className="md:col-span-2">
