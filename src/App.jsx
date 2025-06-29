@@ -371,61 +371,246 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage }) =>
                                 </div>
                                 {isExpanded && (
                                     <div className="mt-3">
-                                        {/* --- BEGIN: All details (copy from your previous card body) --- */}
-                                        {contact.phone && <p className="text-gray-700 text-sm flex items-center">{Icons.Phone} {contact.phone}</p>}
-                                        {contact.email && <p className="text-gray-700 text-sm flex items-center">{Icons.Mail} {contact.email}</p>}
-                                        {contact.company && <p className="text-gray-700 text-sm flex items-center">{Icons.Building} {contact.company}</p>}
-                                        {contact.address && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} {contact.address}</p>}
-                                        {contact.city && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} City: {contact.city}</p>}
-                                        {contact.state && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} State: {contact.state}</p>}
-                                        {contact.district && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} District: {contact.district}</p>}
-                                        {contact.location && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} Location: {contact.location}</p>}
-                                        {contact.nativeLanguage && <p className="text-gray-700 text-sm flex items-center">{Icons.Globe} Native Language: {contact.nativeLanguage}</p>}
-                                        {contact.purpose && <p className="text-gray-700 text-sm font-semibold flex items-center">{Icons.Briefcase} Purpose: <span className="capitalize ml-1">{contact.purpose}</span></p>}
-                                        {contact.purpose === 'political' && (
-                                            <div className="pl-6 pt-2 border-t border-gray-200 mt-2">
-                                                {contact.paMobileNumber && <p className="text-gray-700 text-sm flex items-center">{Icons.Phone} PA Mobile: {contact.paMobileNumber}</p>}
-                                                {contact.constituency && <p className="text-gray-700 text-sm flex items-center">{Icons.Landmark} Constituency: {contact.constituency}</p>}
-                                                {contact.politicalPartyName && <p className="text-gray-700 text-sm flex items-center">{Icons.Flag} Political Party: {contact.politicalPartyName}</p>}
-                                            </div>
-                                        )}
-                                        {contact.purpose === 'celebrity' && (
-                                            <div className="pl-6 pt-2 border-t border-gray-200 mt-2">
-                                                {contact.managerMobileNumber && <p className="text-gray-700 text-sm flex items-center">{Icons.Phone} Manager Mobile: {contact.managerMobileNumber}</p>}
-                                                {contact.profession && <p className="text-gray-700 text-sm flex items-center">{Icons.Briefcase} Profession: {contact.profession}</p>}
-                                            </div>
-                                        )}
-                                        {contact.purpose === 'serviceProvider' && (
-                                            <div className="pl-6 pt-2 border-t border-gray-200 mt-2">
-                                                {contact.serviceType && <p className="text-gray-700 text-sm flex items-center">{Icons.Briefcase} Service Type: {contact.serviceType}</p>}
-                                                {contact.serviceContactPerson && <p className="text-gray-700 text-sm flex items-center">{Icons.User} Contact Person: {contact.serviceContactPerson}</p>}
-                                                {contact.lastInteractionDate && <p className="text-gray-700 text-sm flex items-center">{Icons.Calendar} Last Interaction: {contact.lastInteractionDate}</p>}
-                                                {contact.contractDetails && <p className="text-gray-700 text-sm flex items-center">{Icons.FileText} Contract: {contact.contractDetails}</p>}
-                                            </div>
-                                        )}
-                                        {contact.purpose === 'teaStall' && (
-                                            <div className="pl-6 pt-2 border-t border-gray-200 mt-2">
-                                                {contact.teaStallCode && <p className="text-gray-700 text-sm flex items-center">{Icons.Coffee} Code: {contact.teaStallCode}</p>}
-                                                {contact.teaStallName && <p className="text-gray-700 text-sm flex items-center">{Icons.Coffee} Stall Name: {contact.teaStallName}</p>}
-                                                {contact.teaStallOwnerName && <p className="text-gray-700 text-sm flex items-center">{Icons.User} Owner: {contact.teaStallOwnerName}</p>}
-                                                {contact.teaStallMobileNumber && <p className="text-gray-700 text-sm flex items-center">{Icons.Phone} Mobile: {contact.teaStallMobileNumber}</p>}
-                                                {contact.teaStallArea && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} Area: {contact.teaStallArea}</p>}
-                                                {contact.teaStallMandal && <p className="text-gray-700 text-sm flex items-center">{Icons.MapPin} Mandal: {contact.teaStallMandal}</p>}
-                                                {contact.teaStallTeaPowderPrice && <p className="text-gray-700 text-sm flex items-center">{Icons.Package} Tea Powder Price: ₹{contact.teaStallTeaPowderPrice}</p>}
-                                                {contact.teaStallOtherSellingItems && <p className="text-gray-700 text-sm flex items-center">{Icons.List} Other Items: {contact.teaStallOtherSellingItems}</p>}
-                                            </div>
-                                        )}
-                                        {(contact.purpose === 'influencer' || (!contact.purpose && (contact.x_twitter || contact.facebook || contact.youtube || contact.instagram))) && (
-                                            <div className="pl-6 pt-2 border-t border-gray-200 mt-2">
-                                                {contact.x_twitter && <p className="text-gray-700 text-sm flex items-center">{Icons.X} X (Twitter): {contact.xTwitterProfileName ? <span className="ml-1 text-xs text-gray-600">({contact.xTwitterProfileName})</span> : ''}{contact.xTwitterFollowers ? <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.xTwitterFollowers}</span> : ''}<a href={contact.x_twitter} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a></p>}
-                                                {contact.facebook && <p className="text-gray-700 text-sm flex items-center">{Icons.Facebook} Facebook: {contact.facebookProfileName ? <span className="ml-1 text-xs text-gray-600">({contact.facebookProfileName})</span> : ''}{contact.facebookFollowers ? <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.facebookFollowers}</span> : ''}<a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a></p>}
-                                                {contact.youtube && <p className="text-gray-700 text-sm flex items-center">{Icons.Youtube} YouTube: {contact.youtubeChannelName ? <span className="ml-1 text-xs text-gray-600">({contact.youtubeChannelName})</span> : ''}{contact.youtubeFollowers ? <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">S: {contact.youtubeFollowers}</span> : ''}<a href={contact.youtube} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a></p>}
-                                                {contact.instagram && <p className="text-gray-700 text-sm flex items-center">{Icons.Instagram} Instagram: {contact.instagramProfileName ? <span className="ml-1 text-xs text-gray-600">({contact.instagramProfileName})</span> : ''}{contact.instagramFollowers ? <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.instagramFollowers}</span> : ''}<a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a></p>}
-                                            </div>
-                                        )}
-                                        {contact.remarks && <p className="text-gray-700 text-sm flex items-center">{Icons.FileText} Remarks: {contact.remarks}</p>}
-                                        {contact.notes && <p className="text-gray-700 text-sm flex items-center">{Icons.FileText} Notes: {contact.notes}</p>}
-                                        <div className="mt-4 flex flex-wrap gap-2 justify-end">
+                                        <table className="min-w-full border border-gray-200 rounded overflow-hidden mb-4">
+                                            <tbody>
+                                                {contact.phone && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Phone</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.phone}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.email && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Email</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.email}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.company && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Company</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.company}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.address && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Address</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.address}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.city && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">City</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.city}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.state && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">State</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.state}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.district && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">District</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.district}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.location && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Location</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.location}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.nativeLanguage && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Native Language</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.nativeLanguage}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.purpose && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Purpose</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100 capitalize">{contact.purpose}</td>
+                                                    </tr>
+                                                )}
+                                                {/* Add purpose-specific fields as rows */}
+                                                {contact.purpose === 'political' && (
+                                                    <>
+                                                        {contact.paMobileNumber && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">PA Mobile</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.paMobileNumber}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.constituency && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Constituency</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.constituency}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.politicalPartyName && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Political Party</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.politicalPartyName}</td>
+                                                            </tr>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {contact.purpose === 'celebrity' && (
+                                                    <>
+                                                        {contact.managerMobileNumber && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Manager Mobile</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.managerMobileNumber}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.profession && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Profession</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.profession}</td>
+                                                            </tr>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {contact.purpose === 'serviceProvider' && (
+                                                    <>
+                                                        {contact.serviceType && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Service Type</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.serviceType}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.serviceContactPerson && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Contact Person</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.serviceContactPerson}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.lastInteractionDate && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Last Interaction</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.lastInteractionDate}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.contractDetails && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Contract</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.contractDetails}</td>
+                                                            </tr>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {contact.purpose === 'teaStall' && (
+                                                    <>
+                                                        {contact.teaStallCode && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Tea Stall Code</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallCode}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallName && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Tea Stall Name</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallName}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallOwnerName && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Owner Name</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallOwnerName}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallMobileNumber && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Mobile Number</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallMobileNumber}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallArea && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Area</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallArea}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallMandal && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Mandal</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallMandal}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallTeaPowderPrice && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Tea Powder Price</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">₹{contact.teaStallTeaPowderPrice}</td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.teaStallOtherSellingItems && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Other Items</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">{contact.teaStallOtherSellingItems}</td>
+                                                            </tr>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {(contact.purpose === 'influencer' || (!contact.purpose && (contact.x_twitter || contact.facebook || contact.youtube || contact.instagram))) && (
+                                                    <>
+                                                        {contact.x_twitter && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">X (Twitter)</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">
+                                                                    {contact.xTwitterProfileName && <span>({contact.xTwitterProfileName}) </span>}
+                                                                    {contact.xTwitterFollowers && <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.xTwitterFollowers}</span>}
+                                                                    <a href={contact.x_twitter} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.facebook && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Facebook</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">
+                                                                    {contact.facebookProfileName && <span>({contact.facebookProfileName}) </span>}
+                                                                    {contact.facebookFollowers && <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.facebookFollowers}</span>}
+                                                                    <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.youtube && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">YouTube</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">
+                                                                    {contact.youtubeChannelName && <span>({contact.youtubeChannelName}) </span>}
+                                                                    {contact.youtubeFollowers && <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">S: {contact.youtubeFollowers}</span>}
+                                                                    <a href={contact.youtube} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        {contact.instagram && (
+                                                            <tr>
+                                                                <td className="font-semibold px-2 py-1 border-b border-gray-100">Instagram</td>
+                                                                <td className="px-2 py-1 border-b border-gray-100">
+                                                                    {contact.instagramProfileName && <span>({contact.instagramProfileName}) </span>}
+                                                                    {contact.instagramFollowers && <span className="ml-1 text-xs bg-gray-200 px-2 py-1 rounded">F: {contact.instagramFollowers}</span>}
+                                                                    <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline ml-2">Link</a>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </>
+                                                )}
+                                                {contact.remarks && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1 border-b border-gray-100">Remarks</td>
+                                                        <td className="px-2 py-1 border-b border-gray-100">{contact.remarks}</td>
+                                                    </tr>
+                                                )}
+                                                {contact.notes && (
+                                                    <tr>
+                                                        <td className="font-semibold px-2 py-1">Notes</td>
+                                                        <td className="px-2 py-1">{contact.notes}</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                        <div className="mt-2 flex flex-wrap gap-2 justify-end">
                                             <button
                                                 className="share-btn flex items-center bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm transition-colors duration-200 shadow-md"
                                                 onClick={(e) => { e.stopPropagation(); handleShare(contact); }}
@@ -449,7 +634,6 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage }) =>
                                                 {Icons.Trash2} Delete
                                             </button>
                                         </div>
-                                        {/* --- END: All details --- */}
                                     </div>
                                 )}
                             </li>
