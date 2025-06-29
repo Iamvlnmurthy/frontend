@@ -140,18 +140,18 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         if (submitBtn) submitBtn.disabled = true;
         if (fetchBtn) {
             fetchBtn.disabled = true;
-            fetchBtn.innerHTML = `${Icons.MapPin} Fetching...`;
+            fetchBtn.innerHTML = `📍 Fetching...`;
         }
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                setFormData(prev => ({ ...prev, location: `Latitude: ${latitude}, Longitude: ${longitude}` }));
+                setFormData(prev => ({ ...prev, location: `${latitude},${longitude}` }));
                 displayMessage('Location coordinates filled!', true);
                 if (submitBtn) submitBtn.disabled = false;
                 if (fetchBtn) {
                     fetchBtn.disabled = false;
-                    fetchBtn.innerHTML = `${Icons.MapPin} Fetch Location`;
+                    fetchBtn.innerHTML = `📍 Fetch Location`;
                 }
             }, (error) => {
                 console.error('Geolocation error:', error);
@@ -159,7 +159,7 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
                 if (submitBtn) submitBtn.disabled = false;
                 if (fetchBtn) {
                     fetchBtn.disabled = false;
-                    fetchBtn.innerHTML = `${Icons.MapPin} Fetch Location`;
+                    fetchBtn.innerHTML = `📍 Fetch Location`;
                 }
             });
         } else {
