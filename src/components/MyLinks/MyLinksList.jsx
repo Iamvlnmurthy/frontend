@@ -5,6 +5,7 @@ const API_BASE_URL = 'https://backend-ia06.onrender.com/api';
 const MyLinksList = ({ setActiveSubMenu, setEditingLink, displayMessage, showConfirmationModal }) => {
     const [links, setLinks] = useState([]);
     const [filterValue, setFilterValue] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
 
     const fetchLinks = useCallback(async () => {
         try {
@@ -23,12 +24,15 @@ const MyLinksList = ({ setActiveSubMenu, setEditingLink, displayMessage, showCon
     }, [fetchLinks]);
 
     const filteredLinks = links.filter(link => {
-        if (!filterValue) return true;
-        return (
+        const matchesText = !filterValue ||
             (link.name || '').toLowerCase().includes(filterValue.toLowerCase()) ||
-            (link.url || '').toLowerCase().includes(filterValue.toLowerCase())
-        );
+            (link.url || '').toLowerCase().includes(filterValue.toLowerCase());
+        const matchesCategory = !categoryFilter || link.category === categoryFilter;
+        return matchesText && matchesCategory;
     });
+
+    // Get unique categories for dropdown
+    const uniqueCategories = Array.from(new Set(links.map(link => link.category).filter(Boolean)));
 
     return (
         <div className="bg-white rounded-lg p-6">
@@ -44,6 +48,20 @@ const MyLinksList = ({ setActiveSubMenu, setEditingLink, displayMessage, showCon
                     onChange={(e) => setFilterValue(e.target.value)}
                 />
             </div>
+            <div className="mb-6 p-4 border border-gray-200 rounded-md bg-gray-50">
+                <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700 mb-1">Filter by Category:</label>
+                <select
+                    id="categoryFilter"
+                    className="mb-3 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                    value={categoryFilter}
+                    onChange={e => setCategoryFilter(e.target.value)}
+                >
+                    <option value="">All Categories</option>
+                    {uniqueCategories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                </select>
+            </div>
             {links.length === 0 ? (
                 <p className="text-gray-600">No links found. Add one using the "Add Link" tab!</p>
             ) : filteredLinks.length === 0 ? (
@@ -54,6 +72,9 @@ const MyLinksList = ({ setActiveSubMenu, setEditingLink, displayMessage, showCon
                         <li key={link.id} className="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center">
                             <div className="flex-grow space-y-1">
                                 <p className="text-lg font-semibold text-gray-900 flex items-center">{link.name}</p>
+                                {link.category && (
+                                    <span className="inline-block bg-gray-200 text-gray-700 text-xs font-medium rounded px-2 py-0.5 ml-2">{link.category}</span>
+                                )}
                                 {link.description && (
                                     <p className="text-gray-500 text-sm mb-1">{link.description}</p>
                                 )}

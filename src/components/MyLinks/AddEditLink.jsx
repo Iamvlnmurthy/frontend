@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 const API_BASE_URL = 'https://backend-ia06.onrender.com/api';
 
 const AddEditLink = ({ editingLink, setEditingLink, setActiveSubMenu, displayMessage, fetchLinks }) => {
-    const [formData, setFormData] = useState({ name: '', url: '', description: '', username: '', password: '' });
+    const [formData, setFormData] = useState({ name: '', url: '', description: '', username: '', password: '', category: '' });
 
     useEffect(() => {
         if (editingLink) {
@@ -13,9 +13,10 @@ const AddEditLink = ({ editingLink, setEditingLink, setActiveSubMenu, displayMes
                 description: editingLink.description || '',
                 username: editingLink.username || '',
                 password: editingLink.password || '',
+                category: editingLink.category || '',
             });
         } else {
-            setFormData({ name: '', url: '', description: '', username: '', password: '' });
+            setFormData({ name: '', url: '', description: '', username: '', password: '', category: '' });
         }
     }, [editingLink]);
 
@@ -59,7 +60,7 @@ const AddEditLink = ({ editingLink, setEditingLink, setActiveSubMenu, displayMes
 
             displayMessage(`Link ${editingLink ? 'updated' : 'added'} successfully!`, true);
             setEditingLink(null);
-            setFormData({ name: '', url: '', description: '', username: '', password: '' });
+            setFormData({ name: '', url: '', description: '', username: '', password: '', category: '' });
             setActiveSubMenu('listLinks');
             if (fetchLinks) fetchLinks();
         } catch (error) {
@@ -96,6 +97,17 @@ const AddEditLink = ({ editingLink, setEditingLink, setActiveSubMenu, displayMes
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                         placeholder="e.g., https://example.com"
                         required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category:</label>
+                    <input
+                        type="text"
+                        id="category"
+                        value={formData.category || ''}
+                        onChange={handleChange}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                        placeholder="e.g., Work, Social, Tools, Banking"
                     />
                 </div>
                 <div>
