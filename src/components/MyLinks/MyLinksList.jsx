@@ -57,6 +57,12 @@ const MyLinksList = ({ setActiveSubMenu, setEditingLink, displayMessage, showCon
                                 {link.description && (
                                     <p className="text-gray-500 text-sm mb-1">{link.description}</p>
                                 )}
+                                {link.username && (
+                                    <p className="text-gray-500 text-sm mb-1"><span className="font-semibold">Username:</span> {link.username}</p>
+                                )}
+                                {link.password && (
+                                    <p className="text-gray-500 text-sm mb-1"><span className="font-semibold">Password:</span> {link.password}</p>
+                                )}
                                 <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{link.url}</a>
                             </div>
                             <div className="mt-4 sm:mt-0 flex flex-wrap gap-2 justify-end">
