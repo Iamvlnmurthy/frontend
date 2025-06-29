@@ -1,8 +1,8 @@
 // src/App.js
 import React, { useState, useEffect, useCallback } from 'react';
-import ConfirmationModal from './components/ConfirmationModal';
-import { Icons } from './utils/icons';
-import ContactList from './components/ContactList';
+import ConfirmationModal from './components/ConfirmationModal.jsx';
+import { Icons } from './utils/icons.jsx';
+import ContactList from './components/ContactList.jsx';
 
 const API_BASE_URL = 'https://backend-ia06.onrender.com/api'; // Your Node.js backend URL
 

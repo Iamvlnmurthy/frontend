@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Icons } from '../utils/icons';
+import { Icons } from '../utils/icons.jsx';
 
 // TODO: Move API_BASE_URL to a config file or pass as prop
 const API_BASE_URL = 'https://backend-ia06.onrender.com/api';
