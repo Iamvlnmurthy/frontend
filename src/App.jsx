@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ConfirmationModal from './components/ConfirmationModal.jsx';
 import { Icons } from './utils/icons.jsx';
 import ContactList from './components/ContactList.jsx';
+import MyLinksList from './components/MyLinks/MyLinksList.jsx';
+import AddEditLink from './components/MyLinks/AddEditLink.jsx';
 
 const API_BASE_URL = 'https://backend-ia06.onrender.com/api'; // Your Node.js backend URL
 
@@ -144,24 +146,21 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
-                const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"; // REPLACE WITH YOUR ACTUAL API KEY
-                const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`;
-
                 try {
-                    const response = await fetch(geocodingUrl);
+                    // Call the digipin API
+                    const digipinUrl = `${API_BASE_URL}/digipin/encode?latitude=${latitude}&longitude=${longitude}`;
+                    const response = await fetch(digipinUrl);
+                    if (!response.ok) throw new Error('Failed to fetch digipin');
                     const data = await response.json();
-
-                    if (data.results && data.results.length > 0) {
-                        setFormData(prev => ({ ...prev, location: data.results[0].formatted_address }));
-                        displayMessage('Location fetched successfully!', true);
+                    if (data.digipin) {
+                        setFormData(prev => ({ ...prev, location: data.digipin }));
+                        displayMessage('Location (Digipin) fetched successfully!', true);
                     } else {
-                        displayMessage('Could not find address for location.', false);
-                        setFormData(prev => ({ ...prev, location: `Lat: ${latitude}, Lon: ${longitude}` }));
+                        displayMessage('Could not get digipin for location.', false);
                     }
                 } catch (error) {
-                    console.error("Error fetching location from Google Maps API:", error);
-                    displayMessage('Error fetching location address.', false);
-                    setFormData(prev => ({ ...prev, location: `Lat: ${latitude}, Lon: ${longitude}` }));
+                    console.error('Error fetching digipin:', error);
+                    displayMessage('Error fetching digipin for your location.', false);
                 } finally {
                     if (submitBtn) submitBtn.disabled = false;
                     if (fetchBtn) {
@@ -170,7 +169,7 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
                     }
                 }
             }, (error) => {
-                console.error("Geolocation error:", error);
+                console.error('Geolocation error:', error);
                 displayMessage(`Geolocation error: ${error.message || 'An unknown geolocation error occurred'}. Please enable location services.`, false);
                 if (submitBtn) submitBtn.disabled = false;
                 if (fetchBtn) {
@@ -1387,6 +1386,7 @@ function App() {
     const [editingContact, setEditingContact] = useState(null);
     const [productToEdit, setProductToEdit] = useState(null);
     const [extractedContactData, setExtractedContactData] = useState(null);
+    const [editingLink, setEditingLink] = useState(null);
 
     // State for confirmation modal
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -1466,6 +1466,10 @@ function App() {
             { name: 'Product List', id: 'listProducts', icon: Icons.List },
             { name: 'Add Product', id: 'addProduct', icon: Icons.Plus },
         ],
+        mylinks: [
+            { name: 'Links List', id: 'listLinks', icon: Icons.List },
+            { name: 'Add Link', id: 'addLink', icon: Icons.Plus },
+        ],
         tools: [
             { name: 'Extract Contact Info', id: 'extractContact', icon: Icons.Clipboard },
             { name: 'Backup & Restore', id: 'backupRestore', icon: Icons.Upload },
@@ -1482,6 +1486,10 @@ function App() {
                 return <ProductList setOverallActiveSubMenu={setActiveSubMenu} setProductToEdit={setProductToEdit} displayMessage={displayMessage} />;
             case 'addProduct':
                 return <AddEditProduct productToEdit={productToEdit} setProductToEdit={setProductToEdit} setOverallActiveSubMenu={setActiveSubMenu} displayMessage={displayMessage} />;
+            case 'listLinks':
+                return <MyLinksList setActiveSubMenu={setActiveSubMenu} setEditingLink={setEditingLink} displayMessage={displayMessage} showConfirmationModal={showConfirmationModal} />;
+            case 'addLink':
+                return <AddEditLink editingLink={editingLink} setEditingLink={setEditingLink} setActiveSubMenu={setActiveSubMenu} displayMessage={displayMessage} />;
             case 'extractContact':
                 return <ExtractContact setOverallActiveSubMenu={setActiveSubMenu} setExtractedContactData={setExtractedContactData} displayMessage={displayMessage} />;
             case 'backupRestore':
@@ -1546,6 +1554,7 @@ function App() {
                                     setProductToEdit(null);
                                     setExtractedContactData(null);
                                     setEditingContact(null);
+                                    setEditingLink(null);
                                 }}
                             >
                                 {Icons.User} Contacts
@@ -1561,9 +1570,26 @@ function App() {
                                     setExtractedContactData(null);
                                     setEditingContact(null);
                                     setProductToEdit(null);
+                                    setEditingLink(null);
                                 }}
                             >
                                 {Icons.Package} Products
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                id="main-menu-mylinks"
+                                className={`flex items-center px-5 py-2 rounded-full font-semibold transition-all duration-300 ${activeMainMenu === 'mylinks' ? 'bg-white text-red-700 shadow-md scale-105' : 'hover:bg-red-600 hover:scale-105'}`}
+                                onClick={() => {
+                                    setActiveMainMenu('mylinks');
+                                    setActiveSubMenu('listLinks');
+                                    setEditingContact(null);
+                                    setProductToEdit(null);
+                                    setExtractedContactData(null);
+                                    setEditingLink(null);
+                                }}
+                            >
+                                {Icons.Link} My Links
                             </button>
                         </li>
                         <li>
@@ -1576,6 +1602,7 @@ function App() {
                                     setExtractedContactData(null);
                                     setEditingContact(null);
                                     setProductToEdit(null);
+                                    setEditingLink(null);
                                 }}
                             >
                                 {Icons.Sliders} Tools
