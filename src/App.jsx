@@ -838,7 +838,6 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
                         onChange={handleChange}
                         className={`${className} bg-white`}
                         required={requiredAttr}
-                        disabled={disabledAttr}
                     >
                         {options.map(option => (
                             <option key={option.value} value={option.value}>
