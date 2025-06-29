@@ -152,7 +152,157 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
 
     return (
         <div className="bg-white rounded-lg p-6">
-            {/* ...rest of the component's JSX... */}
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Your Private Contacts</h2>
+            <div className="mb-6 p-4 border border-gray-200 rounded-md bg-gray-50">
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">Filter Contacts</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label htmlFor="purposeFilter" className="block text-sm font-medium text-gray-700">Filter by Purpose:</label>
+                        <select
+                            id="purposeFilter"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            value={purposeFilter}
+                            onChange={(e) => setPurposeFilter(e.target.value)}
+                        >
+                            <option value="">All Purposes</option>
+                            <option value="general">General</option>
+                            <option value="distributor">Distributor</option>
+                            <option value="influencer">Influencer</option>
+                            <option value="political">Political</option>
+                            <option value="celebrity">Celebrity</option>
+                            <option value="serviceProvider">Service Provider</option>
+                            <option value="customer">Customer</option>
+                            <option value="teaStall">Tea Stall</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="filterField" className="block text-sm font-medium text-gray-700">Filter by Field:</label>
+                        <select
+                            id="filterField"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            value={filterField}
+                            onChange={(e) => {
+                                setFilterField(e.target.value);
+                                setFilterValue(''); // Clear value when field changes
+                            }}
+                        >
+                            <option value="name">Name</option>
+                            <option value="phone">Phone</option>
+                            <option value="email">Email</option>
+                            <option value="company">Company</option>
+                            <option value="address">Address (Street)</option>
+                            <option value="city">City</option>
+                            <option value="state">State</option>
+                            <option value="district">District</option>
+                            <option value="location">Location</option>
+                            <option value="nativeLanguage">Native Language</option>
+                            <option value="remarks">Remarks</option>
+                            <option value="notes">Notes</option>
+                            <option value="paMobileNumber">PA Mobile Number</option>
+                            <option value="constituency">Constituency</option>
+                            <option value="politicalPartyName">Political Party Name</option>
+                            <option value="managerMobileNumber">Manager Mobile Number</option>
+                            <option value="profession">Profession</option>
+                            <option value="serviceType">Service Type</option>
+                            <option value="serviceContactPerson">Service Contact Person</option>
+                            <option value="lastInteractionDate">Last Interaction Date</option>
+                            <option value="contractDetails">Contract Details</option>
+                            <option value="xTwitterProfileName">X (Twitter) Profile Name</option>
+                            <option value="xTwitterFollowers">X (Twitter) Followers</option>
+                            <option value="x_twitter">X (Twitter) URL</option>
+                            <option value="facebookProfileName">Facebook Profile Name</option>
+                            <option value="facebookFollowers">Facebook Followers</option>
+                            <option value="facebook">Facebook URL</option>
+                            <option value="youtubeChannelName">YouTube Channel Name</option>
+                            <option value="youtubeFollowers">YouTube Subscribers</option>
+                            <option value="youtube">YouTube URL</option>
+                            <option value="instagramProfileName">Instagram Profile Name</option>
+                            <option value="instagramFollowers">Instagram Followers</option>
+                            <option value="instagram">Instagram URL</option>
+                            <option value="teaStallCode">Tea Stall Code</option>
+                            <option value="teaStallName">Tea Stall Name</option>
+                            <option value="teaStallOwnerName">Tea Stall Owner Name</option>
+                            <option value="teaStallMobileNumber">Tea Stall Mobile Number</option>
+                            <option value="teaStallArea">Tea Stall Area</option>
+                            <option value="teaStallMandal">Tea Stall Mandal</option>
+                            <option value="teaStallTeaPowderPrice">Tea Stall Tea Powder Price</option>
+                            <option value="teaStallOtherSellingItems">Tea Stall Other Selling Items</option>
+                        </select>
+                    </div>
+                    <div className="md:col-span-2">
+                        <label htmlFor="filterValue" className="block text-sm font-medium text-gray-700">Value:</label>
+                        <input
+                            type={getInputType(filterField)}
+                            id="filterValue"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            placeholder={getPlaceholder(filterField)}
+                            value={filterValue}
+                            onChange={(e) => setFilterValue(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </div>
+            {contacts.length === 0 ? (
+                <p className="text-gray-600">No private contacts found. Add one using the "Add Contact" tab!</p>
+            ) : filteredContacts.length === 0 ? (
+                <p className="text-gray-600">No contacts match your filters.</p>
+            ) : (
+                <ul className="space-y-4">
+                    {filteredContacts.map(contact => {
+                        const isExpanded = expandedContactId === contact.id;
+                        return (
+                            <li
+                                key={contact.id}
+                                className={`bg-gray-50 p-4 rounded-lg shadow-md flex flex-col transition-all duration-200 ${isExpanded ? 'border-2 border-red-400' : 'cursor-pointer hover:bg-red-50'}`}
+                            >
+                                <div
+                                    className="flex items-center"
+                                    onClick={() => setExpandedContactId(isExpanded ? null : contact.id)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <span className="text-lg font-semibold text-gray-900 flex items-center">
+                                        {Icons.User} {contact.name || ''}
+                                    </span>
+                                    <span className="ml-2 text-gray-400">{isExpanded ? '▲' : '▼'}</span>
+                                </div>
+                                {isExpanded && (
+                                    <div className="mt-3">
+                                        <table className="min-w-full border border-gray-200 rounded overflow-hidden mb-4">
+                                            <tbody>
+                                                {/* ...rest of the table rows for contact details, as in the original App.jsx... */}
+                                            </tbody>
+                                        </table>
+                                        <div className="mt-2 flex flex-wrap gap-2 justify-end">
+                                            <button
+                                                className="share-btn flex items-center bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm transition-colors duration-200 shadow-md"
+                                                onClick={(e) => { e.stopPropagation(); handleShare(contact); }}
+                                            >
+                                                {Icons.Share2} Share
+                                            </button>
+                                            <button
+                                                className="edit-btn flex items-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm transition-colors duration-200 shadow-md"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setEditingContact(contact);
+                                                    setActiveSubMenu('addContact');
+                                                }}
+                                            >
+                                                {Icons.Edit} Edit
+                                            </button>
+                                            <button
+                                                className="delete-btn flex items-center bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition-colors duration-200 shadow-md"
+                                                onClick={(e) => { e.stopPropagation(); handleDeleteClick(contact.id); }}
+                                            >
+                                                {Icons.Trash2} Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
         </div>
     );
 };
