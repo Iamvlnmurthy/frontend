@@ -213,6 +213,28 @@ const AddEditContact = ({ editingContact, setEditingContact, extractedContactDat
 
         dataToSend.timestamp = new Date().toISOString();
 
+        // Prevent duplicate mobile number for new contacts and editing
+        try {
+            const response = await fetch(`${API_BASE_URL}/contacts`);
+            if (!response.ok) throw new Error('Failed to fetch contacts for duplicate check');
+            const allContacts = await response.json();
+            const newPhone = dataToSend.phone;
+            const duplicate = allContacts.some(c => {
+                // If editing, allow the same number for the contact being edited
+                if (editingContact && c.id === editingContact.id) return false;
+                return c.phone === newPhone;
+            });
+            if (duplicate) {
+                displayMessage('A contact with this mobile number already exists.', false);
+                if (submitBtn) submitBtn.disabled = false;
+                return;
+            }
+        } catch (err) {
+            displayMessage('Error checking for duplicate mobile number.', false);
+            if (submitBtn) submitBtn.disabled = false;
+            return;
+        }
+
         try {
             let response;
             if (editingContact) {
