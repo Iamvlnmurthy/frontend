@@ -277,7 +277,30 @@ const ContactList = ({ setActiveSubMenu, setEditingContact, displayMessage, show
                                     <div className="mt-3">
                                         <table className="min-w-full border border-gray-200 rounded overflow-hidden mb-4">
                                             <tbody>
-                                                {/* ...rest of the table rows for contact details, as in the original App.jsx... */}
+                                                {Object.entries(contact).map(([key, value]) => {
+                                                    if (!value || [
+                                                        '_id', 'id', '__v', 'timestamp', 'createdAt', 'updatedAt'
+                                                    ].includes(key)) return null;
+                                                    // Human-readable labels for known fields
+                                                    const labels = {
+                                                        name: 'Name', phone: 'Phone', email: 'Email', company: 'Company', address: 'Address', city: 'City', state: 'State', district: 'District', location: 'Location', nativeLanguage: 'Native Language', purpose: 'Purpose', remarks: 'Remarks', notes: 'Notes',
+                                                        x_twitter: 'X (Twitter) URL', xTwitterProfileName: 'X (Twitter) Profile Name', xTwitterFollowers: 'X (Twitter) Followers',
+                                                        facebook: 'Facebook URL', facebookProfileName: 'Facebook Profile Name', facebookFollowers: 'Facebook Followers',
+                                                        youtube: 'YouTube URL', youtubeChannelName: 'YouTube Channel Name', youtubeFollowers: 'YouTube Subscribers',
+                                                        instagram: 'Instagram URL', instagramProfileName: 'Instagram Profile Name', instagramFollowers: 'Instagram Followers',
+                                                        paMobileNumber: 'PA Mobile Number', constituency: 'Constituency', politicalPartyName: 'Political Party Name',
+                                                        managerMobileNumber: 'Manager Mobile Number', profession: 'Profession',
+                                                        serviceType: 'Service Type', serviceContactPerson: 'Service Contact Person', lastInteractionDate: 'Last Interaction Date', contractDetails: 'Contract Details',
+                                                        teaStallCode: 'Tea Stall Code', teaStallName: 'Tea Stall Name', teaStallOwnerName: 'Tea Stall Owner Name', teaStallMobileNumber: 'Tea Stall Mobile Number', teaStallArea: 'Tea Stall Area', teaStallMandal: 'Tea Stall Mandal', teaStallTeaPowderPrice: 'Tea Stall Tea Powder Price', teaStallOtherSellingItems: 'Tea Stall Other Selling Items',
+                                                        shopCategory: 'Shop Category', shopName: 'Shop Name', shopOwnerName: 'Shop Owner Name', shopContactNumber: 'Shop Contact Number', shopAddress: 'Shop Address', shopVillage: 'Shop Village', shopMandal: 'Shop Mandal',
+                                                    };
+                                                    return (
+                                                        <tr key={key}>
+                                                            <td className="font-semibold text-gray-700 pr-4 py-1 align-top whitespace-nowrap">{labels[key] || key}</td>
+                                                            <td className="text-gray-800 py-1 break-all">{value}</td>
+                                                        </tr>
+                                                    );
+                                                })}
                                             </tbody>
                                         </table>
                                         <div className="mt-2 flex flex-wrap gap-2 justify-end">
